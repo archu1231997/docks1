@@ -39,7 +39,7 @@ jobs:
       # Step 6: Send email notification on success
       - name: Send email notification on success
         if: success()
-        uses: dawidd6/action-send-mail@v3  # Corrected the action
+        uses: archu1231997/docks1@v3  # Corrected the action
         with:
           server_address: smtp.gmail.com
           server_port: 587
@@ -61,7 +61,7 @@ jobs:
       # Step 7: Send email notification on failure
       - name: Send email notification on failure
         if: failure()
-        uses: dawidd6/action-send-mail@v3  # Corrected the action
+        uses: archu1231997/docks1@v3  # Corrected the action
         with:
           server_address: smtp.gmail.com
           server_port: 587
