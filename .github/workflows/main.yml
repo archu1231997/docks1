@@ -43,7 +43,7 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: true
+          secure: false
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Successful"
@@ -65,7 +65,7 @@ jobs:
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: true
+          secure: false
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Failed"
