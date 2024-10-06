@@ -20,7 +20,7 @@ jobs:
 
       # Step 2: Set up Node.js environment
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@main
         with:
           node-version: '18'
 
@@ -39,7 +39,7 @@ jobs:
       # Step 6: Send email notification on success
       - name: Send email notification on success
         if: success()
-        uses: archu1231997/docks1@v3  # Corrected the action
+        uses: archu1231997/docks1@main  # Corrected the action
         with:
           server_address: smtp.gmail.com
           server_port: 587
