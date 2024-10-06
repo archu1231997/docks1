@@ -39,11 +39,11 @@ jobs:
       # Step 6: Send email notification on success
       - name: Send email notification on success
         if: success()
-        uses: archu1231997/docks1@main
+        uses: dawidd6/action-send-mail@v3  # Corrected the action
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: false  # Updated this to false
+          secure: true
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Successful"
@@ -61,11 +61,11 @@ jobs:
       # Step 7: Send email notification on failure
       - name: Send email notification on failure
         if: failure()
-        uses: archu1231997/docks1@main
+        uses: dawidd6/action-send-mail@v3  # Corrected the action
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: false  # Updated this to false
+          secure: true
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Failed"
