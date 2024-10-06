@@ -35,15 +35,15 @@ jobs:
       # Step 5: Build Docker image
       - name: Build Docker image
         run: docker build -t my-app .
-      
+
       # Step 6: Send email notification on success
       - name: Send email notification on success
         if: success()
-        uses: dawidd6/action-send-mail@v3
+        uses: archu1231997/docks1@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: true
+          secure: false  # Updated this to false
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Successful"
@@ -61,11 +61,11 @@ jobs:
       # Step 7: Send email notification on failure
       - name: Send email notification on failure
         if: failure()
-        uses: dawidd6/action-send-mail@v3
+        uses: archu1231997/docks1@v3
         with:
           server_address: smtp.gmail.com
           server_port: 587
-          secure: true
+          secure: false  # Updated this to false
           username: ${{ secrets.GMAIL_USER }}
           password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Failed"
@@ -79,7 +79,3 @@ jobs:
             - Author: `${{ github.actor }}`
             - Branch: `${{ github.ref }}`
             - Check the logs for more information: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-      
-   
-          
