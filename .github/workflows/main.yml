@@ -22,7 +22,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '18.x'
+          node-version: '18'
 
       # Step 3: Install dependencies
       - name: Install dependencies
@@ -34,6 +34,48 @@ jobs:
 
       # Step 5: Build Docker image
       - name: Build Docker image
-        run: docker build -t yourusername/sample-app .
+        run: docker build -t my-app .
 
-     
+      # Step 6: Send email notification on success
+      - name: Send email notification on success
+        if: success()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          to: your-email@gmail.com
+          subject: "CI/CD Pipeline Notification - Build Successful"
+          body: |
+            Your React application has been built successfully!
+
+            Build Details:
+            - Commit: `${{ github.sha }}`
+            - Author: `${{ github.actor }}`
+            - Branch: `${{ github.ref }}`
+            - View the build at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          smtp-server: smtp.gmail.com
+          smtp-port: 587
+          smtp-user: ${{ secrets.GMAIL_USER }}
+          smtp-password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          from: your-email@gmail.com
+
+      # Step 7: Send email notification on failure
+      - name: Send email notification on failure
+        if: failure()
+        uses: dawidd6/action-send-mail@v3
+        with:
+          to: your-email@gmail.com
+          subject: "CI/CD Pipeline Notification - Build Failed"
+          body: |
+            The build for your React application has failed.
+
+            Build Details:
+            - Commit: `${{ github.sha }}`
+            - Author: `${{ github.actor }}`
+            - Branch: `${{ github.ref }}`
+            - Check the logs for more information: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+          smtp-server: smtp.gmail.com
+          smtp-port: 587
+          smtp-user: ${{ secrets.GMAIL_USER }}
+          smtp-password: ${{ secrets.GMAIL_APP_PASSWORD }}
+          from: your-email@gmail.com
