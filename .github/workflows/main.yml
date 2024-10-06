@@ -35,14 +35,20 @@ jobs:
       # Step 5: Build Docker image
       - name: Build Docker image
         run: docker build -t my-app .
-
+      
       # Step 6: Send email notification on success
       - name: Send email notification on success
         if: success()
         uses: dawidd6/action-send-mail@v3
         with:
-          to: your-email@gmail.com
+          server_address: smtp.gmail.com
+          server_port: 587
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Successful"
+          to: archanadhanabal97@gmail.com
+          from: archanadhanabal97@gmail.com
           body: |
             Your React application has been built successfully!
 
@@ -52,19 +58,19 @@ jobs:
             - Branch: `${{ github.ref }}`
             - View the build at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-          smtp-server: smtp.gmail.com
-          smtp-port: 587
-          smtp-user: ${{ secrets.GMAIL_USER }}
-          smtp-password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          from: your-email@gmail.com
-
       # Step 7: Send email notification on failure
       - name: Send email notification on failure
         if: failure()
         uses: dawidd6/action-send-mail@v3
         with:
-          to: your-email@gmail.com
+          server_address: smtp.gmail.com
+          server_port: 587
+          secure: true
+          username: ${{ secrets.GMAIL_USER }}
+          password: ${{ secrets.GMAIL_APP_PASSWORD }}
           subject: "CI/CD Pipeline Notification - Build Failed"
+          to: archanadhanabal97@gmail.com
+          from: archanadhanabal97@gmail.com
           body: |
             The build for your React application has failed.
 
@@ -74,8 +80,6 @@ jobs:
             - Branch: `${{ github.ref }}`
             - Check the logs for more information: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
 
-          smtp-server: smtp.gmail.com
-          smtp-port: 587
-          smtp-user: ${{ secrets.GMAIL_USER }}
-          smtp-password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          from: your-email@gmail.com
+      
+   
+          
