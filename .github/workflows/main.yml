@@ -34,48 +34,20 @@ jobs:
 
       # Step 5: Build Docker image
       - name: Build Docker image
-        run: docker build -t my-app .
+        run: docker build -t yourusername/sample-app .
 
-      # Step 6: Send email notification on success
-      - name: Send email notification on success
-        if: success()
-        uses: archu1231997/docks1@main  # Corrected the action
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          secure: false
-          username: ${{ secrets.GMAIL_USER }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: "CI/CD Pipeline Notification - Build Successful"
-          to: archanadhanabal97@gmail.com
-          from: archanadhanabal97@gmail.com
-          body: |
-            Your React application has been built successfully!
+      # Step 6: Notify on success (Google Chat)
+      - name: Notify on success
+        if: ${{ success() }}
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          --data '{"text": "Deployment successful!"}' \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
 
-            Build Details:
-            - Commit: `${{ github.sha }}`
-            - Author: `${{ github.actor }}`
-            - Branch: `${{ github.ref }}`
-            - View the build at: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-
-      # Step 7: Send email notification on failure
-      - name: Send email notification on failure
-        if: failure()
-        uses: archu1231997/docks1@main # Corrected the action
-        with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          secure: false
-          username: ${{ secrets.GMAIL_USER }}
-          password: ${{ secrets.GMAIL_APP_PASSWORD }}
-          subject: "CI/CD Pipeline Notification - Build Failed"
-          to: archanadhanabal97@gmail.com
-          from: archanadhanabal97@gmail.com
-          body: |
-            The build for your React application has failed.
-
-            Build Details:
-            - Commit: `${{ github.sha }}`
-            - Author: `${{ github.actor }}`
-            - Branch: `${{ github.ref }}`
-            - Check the logs for more information: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      # Step 7: Notify on failure (Google Chat)
+      - name: Notify on failure
+        if: ${{ failure() }}
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          --data '{"text": "Deployment failed!"}' \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
