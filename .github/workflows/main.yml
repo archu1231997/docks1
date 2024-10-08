@@ -1,4 +1,3 @@
-
 permissions:
   contents: write
 
@@ -37,38 +36,34 @@ jobs:
 
     - run: npm run build --if-present
 
-    - run: npm start
-    - name: Send Start Notification and Run Build
-        env:
-          WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}  # Store webhook in GitHub Secrets
-        run: |
-          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-          ACTOR=$(git config user.name)
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          bash /home/archu/dock/notify-start.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
-          cd /home/archu/dock/notify-start.sh
-          bash start.sh
+    # Start notification and run build
+    - name: Send Start Notification
+      env:
+        WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}  # Store webhook in GitHub Secrets
+      run: |
+        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        ACTOR=$(git config user.name)
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        bash /home/archu/dock/notify-start.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
+    
+    # Notify on success
+    - name: Notify Success
+      if: success()  # Runs only if the previous step succeeded
+      env:
+        WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      run: |
+        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        ACTOR=$(git config user.name)
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        bash /home/archu/dock/notify-success.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
 
-      # Step 5: Notify on success
-      - name: Notify Success
-        if: success()  # Runs only if the previous step succeeded
-        env:
-          WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-        run: |
-          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-          ACTOR=$(git config user.name)
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          bash /home/archu/dock/notify-success.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
-
-      # Step 6: Notify on failure
-      - name: Notify Failure
-        if: failure()  # Runs only if the previous step failed
-        env:
-          WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
-        run: |
-          BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
-          ACTOR=$(git config user.name)
-          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-          bash /home/archu/dock/notify-failure.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
-
-  
+    # Notify on failure
+    - name: Notify Failure
+      if: failure()  # Runs only if the previous step failed
+      env:
+        WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+      run: |
+        BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+        ACTOR=$(git config user.name)
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        bash /home/archu/dock/notify-failure.sh "$WEBHOOK_URL" "$BRANCH_NAME" "$ACTOR" "$COMMIT_MESSAGE"
