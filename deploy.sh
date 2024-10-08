@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 # Your deployment commands go here
 # For example:
@@ -8,7 +8,8 @@ echo "Starting deployment..."
 DEPLOYMENT_SUCCESS=true  # Set this based on actual deployment result
 
 # Google Chat webhook URL (Replace with your actual webhook URL)
-WEBHOOK_URL="https://chat.googleapis.com/v1/spaces/AAAAB7ywqPU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=8kzhcjp7oEWLuM3yZJakRTBEXg92PAqG2k2MYOV1nWY”
+WEBHOOK_URL="https://chat.googleapis.com/v1/spaces/AAAAB7ywqPU/messages?key=AIzaSyDdI0hCZtE6vySjMm-WEfRq3CPzqKqqsHI&token=8kzhcjp7oEWLuM3yZJakRTBEXg92PAqG2k2MYOV1nWY"
+
 
 
 if [ "$DEPLOYMENT_SUCCESS" = true ]; then
